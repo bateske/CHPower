@@ -1,0 +1,33 @@
+# The README's one picture (docs/gameplay.gif): the intro, then each view
+# with the simulator's made-up devices (a keyboard typing, a mouse going
+# round, a Switch-style pad behind a hub). Each clip is its own recording,
+# named in the order it is shown; `chgame gif` runs this script and joins
+# them.
+rec start 2
+wait 80
+rec stop 01_intro
+# The keyboard types into the text field.
+rec start 3
+wait 220
+rec stop 02_keys
+# The mouse's cursor on its grid.
+tap RIGHT
+rec start 2
+wait 90
+rec stop 03_mouse
+# The pad, every button and both sticks.
+tap RIGHT
+rec start 2
+wait 90
+rec stop 04_pad
+# The log of what each device said.
+tap RIGHT
+rec start 2
+wait 20
+tap UP
+wait 6
+tap UP
+wait 6
+tap UP
+wait 30
+rec stop 05_log

@@ -1,0 +1,23 @@
+CHPower
+Copyright 2026 Kevin Bates (bateske)
+
+The libraries (libraries/CHPower, libraries/CHUSBHost), the tools and the
+docs are licensed under the Apache License, Version 2.0; see LICENSE. The
+example apps (libraries/CHPower/examples/CHPDTrigger,
+libraries/CHUSBHost/examples/CHUSBHost and
+libraries/CHUSBHost/examples/CHPDHubProbe) are MIT, each in its own LICENSE.
+
+Parts adapted from WCH's CH32X035 examples, (c) Nanjing Qinheng
+Microelectronics Co., Ltd., whose notice says the software "(modified or
+not) and binary are used for microcontroller manufactured by Nanjing Qinheng
+Microelectronics" (this runs on their CH32X035):
+
+- libraries/CHPower/src/chpower/Pd.cpp: the USB-PD sink, from the
+  USBPD_SNK example (PD_Process.c, V1.0.1, 2023).
+- libraries/CHUSBHost/src/chusbhost/Host.cpp and Hub.cpp: the USBFS host
+  transfers and the hub handling, from the USBFS host driver and the
+  HOST_KM example (ch32x035_usbfs_host.c and app_km.c, V1.0.2, 2021).
+
+The pictures' lettering (docs/brand/, each example's docs/cart.png) is set
+in pixel fonts by other people: Bitrimus (CC0) for the brand, and each box
+art's font is named in its tools/art/title.txt.

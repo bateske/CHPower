@@ -1,0 +1,8 @@
+{
+  "title": "USB HOST",
+  "author": "bateske",
+  "genre": "Application",
+  "cartImage": "docs/cart.png",
+  "url": "https://github.com/bateske/CHPower",
+  "sourceUrl": "https://github.com/bateske/CHPower/tree/main/libraries/CHUSBHost/examples/CHUSBHost"
+}

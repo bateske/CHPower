@@ -1,0 +1,48 @@
+# The README's one picture (docs/gameplay.gif): the intro, then clips of the
+# trigger raising the voltage and switching the output on, the limit, the
+# charger's offer and the guided tour, with the simulator's made-up charger
+# (PD 3.0 with PPS) and a load on CN1. Each clip is its own recording, named
+# in the order it is shown; `chgame gif` runs this script and joins them.
+rec start 2
+wait 80
+rec stop 01_intro
+# The voltage knob held up (big steps), the charger asked once it stops, then
+# the output on: the meter and the scope.
+rec start 2
+wait 20
+hold UP
+wait 75
+release
+wait 50
+tap A
+wait 110
+rec stop 02_output
+# The other knob: the cut-off limit.
+rec start 2
+tap RIGHT
+wait 10
+tap UP
+wait 10
+tap UP
+wait 10
+tap UP
+wait 40
+rec stop 03_limit
+# The menu, and the charger's offer.
+rec start 2
+tap SELECT
+wait 20
+tap A
+wait 60
+rec stop 04_offer
+# The guided tour's first steps.
+tap B
+wait 4
+tap DOWN
+wait 4
+rec start 2
+tap A
+wait 30
+tap A
+wait 60
+rec stop 05_tour

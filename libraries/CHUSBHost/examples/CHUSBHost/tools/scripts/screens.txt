@@ -1,0 +1,19 @@
+# Every view once, with the simulator's made-up devices (a keyboard, a
+# mouse and a Switch-style pad behind a hub).
+wait 24
+snap intro
+wait 300
+snap keys
+tap RIGHT
+wait 60
+snap mouse
+tap RIGHT
+wait 40
+snap pad
+tap RIGHT
+wait 10
+snap log
+hold START
+wait 50
+snap exit
+release
