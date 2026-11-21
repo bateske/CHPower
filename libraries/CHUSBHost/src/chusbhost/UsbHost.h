@@ -142,6 +142,10 @@ struct Key {
 bool nextKey(Key &k);       // the next press, oldest first; false when none is waiting
 uint8_t mods();             // the modifier byte now
 const uint8_t *keysDown();  // the six usages held now (0 = none)
+// Caps Lock: on or off. The driver keeps it (each press of the key toggles
+// it, enter() turns it off), lights the keyboards' LED to match, and gives
+// the letters of nextKey()'s ch their case from it.
+bool capsLock();
 
 // Mice (MOUSE): movement summed since the last takeMouse().
 void takeMouse(int16_t &dx, int16_t &dy, int8_t &wheel);

@@ -7,12 +7,13 @@
 namespace host {
 using namespace in;
 
-static uint8_t modsV, held[6], capsLock;
+static uint8_t modsV, held[6], caps;
 static bool capsChanged;
 static Key keyQ[16];
 static uint8_t keyHead, keyCount;
 
 uint8_t mods() { return modsV; }
+bool capsLock() { return caps != 0; }
 const uint8_t *keysDown() { return held; }
 bool nextKey(Key &k) {
     if (!keyCount) return false;
@@ -28,7 +29,7 @@ static char usChar(uint8_t u, bool shift) {
     static const char PUN[] = "-=[]\\#;'`,./", PUNS[] = "_+{}|~:\"~<>?";
     static const char PAD[] = "/*-+\n1234567890.";
     if (u >= 0x04 && u <= 0x1D) {
-        bool up = shift != (capsLock != 0);
+        bool up = shift != (caps != 0);
         return (char)((up ? 'A' : 'a') + u - 0x04);
     }
     if (u >= 0x1E && u <= 0x27) return shift ? NUMS[u - 0x1E] : NUM[u - 0x1E];
@@ -52,15 +53,21 @@ static void report(Ep &e, const uint8_t *r, uint8_t len) {
     }
     if (len < 8) return;
     modsV = r[0];
+    // The keyboard's rollover error (more keys down than it can report: every
+    // usage 0x01): the modifiers are new, but not which keys are down, so
+    // held[] stays as it was and nothing counts as a press (no ghost presses
+    // of keys still held once the error clears).
+    for (uint8_t i = 2; i < 8; i++)
+        if (r[i] == 0x01) return;
     bool shift = (r[0] & 0x22) != 0;
     for (uint8_t i = 2; i < 8; i++) {
         uint8_t u = r[i];
-        if (u < 4) continue;                    // none, or the keyboard's rollover error
+        if (u < 4) continue;                    // none, or the keyboard's other error codes
         bool was = false;
         for (uint8_t j = 0; j < 6; j++) was |= held[j] == u;
         if (was) continue;
         if (u == 0x39) {                        // Caps Lock: ours to keep (and its LED)
-            capsLock ^= 1;
+            caps ^= 1;
             capsChanged = true;
         }
         if (keyCount < 16) {
@@ -78,7 +85,7 @@ static void reset(bool fresh) {
     modsV = 0;
     memset(held, 0, sizeof held);
     keyHead = keyCount = 0;
-    if (fresh) capsLock = 0;
+    if (fresh) caps = 0;
 }
 
 // A K_PAD interface's descriptor (the gamepad driver did not take it): a
@@ -142,7 +149,7 @@ static void after() {
         Dev &d = dev(i);
         for (uint8_t j = 0; d.addr && j < d.nEp; j++)
             if (d.ep[j].kind == K_KBD) {
-                uint8_t led = capsLock ? 2 : 0;
+                uint8_t led = caps ? 2 : 0;
                 select(d);
                 ctl(0x21, 9, 0x0200, d.ep[j].intf, 1, &led);
             }
