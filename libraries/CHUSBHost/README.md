@@ -46,7 +46,7 @@ names it in `host::begin()`:
 
 | Driver | Reads |
 |---|---|
-| `host::KEYBOARD` | boot keyboards, and a keyboard that declares no boot interface (its report descriptor checked); key presses as events (`nextKey()`), the modifiers (`mods()`), the keys held (`keysDown()`), Caps Lock (`capsLock()`) and its LED; a rollover-error report changes only the modifiers, so no key is pressed twice |
+| `host::KEYBOARD` | boot keyboards, and a keyboard that declares no boot interface (its report descriptor checked); key presses as events (`nextKey()`), the modifiers (`mods()`), the keys held (`keysDown()`), Caps Lock (`capsLock()`) and its LED; an error report (rollover, POST fail, undefined: usages 1-3) changes only the modifiers, so no key is pressed twice |
 | `host::MOUSE` | boot mice: movement, buttons, the wheel |
 | `host::GAMEPAD` | HID gamepads and joysticks: their report descriptor parsed for the buttons, both sticks, the triggers and the hat |
 | `host::XINPUT` | Xbox 360 pads, and the many that pass for one |

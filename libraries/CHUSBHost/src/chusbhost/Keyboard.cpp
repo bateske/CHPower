@@ -53,16 +53,16 @@ static void report(Ep &e, const uint8_t *r, uint8_t len) {
     }
     if (len < 8) return;
     modsV = r[0];
-    // The keyboard's rollover error (more keys down than it can report: every
-    // usage 0x01): the modifiers are new, but not which keys are down, so
-    // held[] stays as it was and nothing counts as a press (no ghost presses
-    // of keys still held once the error clears).
+    // The keyboard's error reports (usages 0x01 rollover, 0x02 POST fail,
+    // 0x03 undefined error): the modifiers are new, but not which keys are
+    // down, so held[] stays as it was and nothing counts as a press (no ghost
+    // presses of keys still held once the error clears).
     for (uint8_t i = 2; i < 8; i++)
-        if (r[i] == 0x01) return;
+        if ((uint8_t)(r[i] - 1) < 3) return;
     bool shift = (r[0] & 0x22) != 0;
     for (uint8_t i = 2; i < 8; i++) {
         uint8_t u = r[i];
-        if (u < 4) continue;                    // none, or the keyboard's other error codes
+        if (!u) continue;                       // none
         bool was = false;
         for (uint8_t j = 0; j < 6; j++) was |= held[j] == u;
         if (was) continue;
