@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower. Power output to 20V. External device support: keyboard, mouse, gamepad. A red handheld cycles between the PD TRIGGER and USB HOST box art"></a>
+<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower. Power output to 20V, 2.4A. External device support: keyboard, mouse, gamepad. A red handheld cycles between the PD TRIGGER and USB HOST box art"></a>
 
 <p>
 <a href="https://github.com/bateske/CHGame"><img src="docs/brand/btn-chgame.svg" alt="CHGame"></a>&nbsp;
@@ -18,7 +18,7 @@
 
 <br>
 
-<img src="docs/brand/warning.svg" alt="Rev 1.5 only: the power section. Warning: up to 20V">
+<img src="docs/brand/warning.svg" alt="Rev 1.5 only: the power section. Warning: up to 20V, 2.4A">
 
 <br>
 
@@ -231,7 +231,7 @@ measured with `python tools/sizes.py` (rev1, -Os, LTO):
 
 ## 🛡 Safety
 
-CN1 can output up to 20 V, and host mode puts the battery's 5 V on the
+CN1 can output up to 20 V and 2.4 A, and host mode puts the battery's 5 V on the
 port. The libraries enforce the following so that sketches don't have to:
 
 - **CN1 follows the PD contract.** `enableCn1()` is refused if there is no

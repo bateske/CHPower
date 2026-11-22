@@ -90,7 +90,7 @@ def draw_static(c):
     c.mask(word, wx, wy, B.INK)
 
     y = LY + logo.height + 34
-    for line in ("Power Output to 20V.", "External device support:", "Keyboard, Mouse, Gamepad."):
+    for line in ("Power Output to 20V, 2.4A.", "External device support:", "Keyboard, Mouse, Gamepad."):
         m = B.scaled(face.mask(line), 3)
         c.mask(m, LX, y, B.INK)
         y += m.shape[0] + 10
@@ -202,7 +202,7 @@ def main():
         print(f"docs/brand/btn-*.svg: {len(BUTTONS)} buttons")
     if "warning" in a.what:
         B.WARNING_TITLE = "REV 1.5 ONLY: THE POWER SECTION"
-        B.WARNING_LINES = ["Warning: up to 20V"]
+        B.WARNING_LINES = ["Warning: up to 20V, 2.4A"]
         p = OUT / "warning.svg"
         p.write_text(B.warning_svg(), encoding="utf-8", newline="\n")
         print(p.relative_to(ROOT).as_posix())
