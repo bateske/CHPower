@@ -98,9 +98,15 @@ https://github.com/bateske/CHGame/releases/latest/download/package_chgame_index.
 
 ### 2. Install the libraries
 
-Download this repository (*Code > Download ZIP*) and copy both folders
-from `libraries/` into the `libraries` folder of your sketchbook (shown
-under *File > Preferences > Sketchbook location*). Restart the IDE.
+Download `CHPower-<version>.zip` and `CHUSBHost-<version>.zip` from the
+[latest release](https://github.com/bateske/CHPower/releases/latest). In
+the Arduino IDE, add each one with *Sketch > Include Library > Add .ZIP
+Library*, then restart the IDE. CHUSBHost requires CHPower, so install
+both even if you only use the USB host.
+
+To track the repository instead, clone it and copy both folders from
+`libraries/` into the `libraries` folder of your sketchbook (shown under
+*File > Preferences > Sketchbook location*):
 
 ```bash
 git clone https://github.com/bateske/CHPower
