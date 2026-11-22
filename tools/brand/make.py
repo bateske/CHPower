@@ -90,8 +90,7 @@ def draw_static(c):
     c.mask(word, wx, wy, B.INK)
 
     y = LY + logo.height + 34
-    for line in ("Power for the CHGame Rev 1.5.", "Power Output to 20V.",
-                 "External device support:", "Keyboard, Mouse, Gamepad."):
+    for line in ("Power Output to 20V.", "External device support:", "Keyboard, Mouse, Gamepad."):
         m = B.scaled(face.mask(line), 3)
         c.mask(m, LX, y, B.INK)
         y += m.shape[0] + 10
