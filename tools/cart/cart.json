@@ -2,14 +2,13 @@
   "_comment": "The CHPower examples cart: a recipe for `chgame cart build` (CHGame's tools/chcart). tools/cart/build.py builds it, and the SD card ZIP from it. The games are named by their sketch folders, relative to the repository root (build.py runs from there). Each sketch's chgame.json gives its title and picture. art/cover.png is drawn by cover.py.",
   "title": "CHPower Examples",
   "author": "bateske",
-  "description": "The CHPower and CHUSBHost example apps for the CHGame Rev 1.5: PD TRIGGER, USB HOST and PD HUB PROBE.",
+  "description": "The CHPower and CHUSBHost example apps for the CHGame Rev 1.5: PD TRIGGER and USB HOST.",
   "url": "https://github.com/bateske/CHPower",
   "menu": {
     "cover": "art/cover.png"
   },
   "games": [
     {"sketch": "libraries/CHPower/examples/CHPDTrigger"},
-    {"sketch": "libraries/CHUSBHost/examples/CHUSBHost"},
-    {"sketch": "libraries/CHUSBHost/examples/CHPDHubProbe"}
+    {"sketch": "libraries/CHUSBHost/examples/CHUSBHost"}
   ]
 }

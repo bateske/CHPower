@@ -9,10 +9,8 @@ the MCU's Rp, and every check of CHPower's runs while the host has the
 port (5 V never goes onto another source's 5 V; host power goes off within
 milliseconds of an unplug). Rev 1.5 only.
 
-The examples are [CHUSBHost](examples/CHUSBHost/README.md), a view for
-each kind of device and a log of what each one said, and
-[CHPDHubProbe](examples/CHPDHubProbe/README.md), a guided bench test for a
-powered USB-C hub.
+The example is [CHUSBHost](examples/CHUSBHost/README.md): a view for each
+kind of device and a log of what each one said.
 
 ## A sketch
 
@@ -124,8 +122,6 @@ the USB host. Three pieces, each opt-in:
 
 The example app uses all three. A PC or a plain charger never hands over
 the host role, so host mode stays paused for them as before.
-[CHPDHubProbe](examples/CHPDHubProbe/CHPDHubProbe.ino) is a guided bench
-test for a new hub, with the USB, PD and timeline logs for a PC.
 
 ## Things to know
 

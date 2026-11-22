@@ -27,5 +27,4 @@ Each library has its own version, in its `library.properties`.
 - New since 0.1.0: `host::capsLock()`. A keyboard's error reports
   (rollover, POST fail, undefined) now update only the modifiers, so keys
   still held are not pressed a second time when the error clears.
-- Examples: CHUSBHost, a view for each device and a log; CHPDHubProbe, a
-  guided bench test for a powered hub.
+- Example: CHUSBHost, a view for each device and a log.

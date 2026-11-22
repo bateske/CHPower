@@ -2,8 +2,8 @@
 
     python tools/cart/build.py [--no-build]
 
-    out/cart/CHPower-Examples.chgame         the multi-cart: PD TRIGGER, USB HOST and
-                                             PD HUB PROBE, with the cover (art/cover.png)
+    out/cart/CHPower-Examples.chgame         the multi-cart: PD TRIGGER and USB HOST,
+                                             with the cover (art/cover.png)
     out/cart/CHPower-Examples-sdcard.zip     the same apps as SD card files: unzip them to
                                              the root of a FAT16/FAT32 card
 
@@ -36,7 +36,6 @@ CHPower Examples: SD card files for the CHGame Rev 1.5
 These apps are for the CHGame Rev 1.5 (a Rev1 board with the power section):
   PD TRIGGER    USB-PD trigger and bench supply (CHPower library)
   USB HOST      keyboards, mice, gamepads and hubs (CHUSBHost library)
-  PD HUB PROBE  step-by-step test for a powered USB-C hub (CHUSBHost library)
 
 Copy everything in this zip (the GAMES folder) to the root of a FAT32 (or
 FAT16) microSD card. Put the card in the CHGame and switch it on: the game

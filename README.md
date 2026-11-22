@@ -35,7 +35,7 @@
   also power and charge the board while it stays the host.
 
 The safety checks are in the libraries, not in the sketches. A sketch only
-links the parts it calls. The repository also has three example sketches.
+links the parts it calls. Each library comes with an example app.
 
 These libraries are kept separate from CHGame because only the Rev 1.5 has
 the power section. Later boards may not have it.
@@ -44,7 +44,7 @@ the power section. Later boards may not have it.
 [multi-cart (`CHPower-Examples.chgame`)](https://github.com/bateske/CHPower/releases/latest/download/CHPower-Examples.chgame)
 or the
 [SD card files (`CHPower-Examples-sdcard.zip`)](https://github.com/bateske/CHPower/releases/latest/download/CHPower-Examples-sdcard.zip).
-Both contain PD TRIGGER, USB HOST and PD HUB PROBE for the Rev 1.5. Unzip
+Both contain PD TRIGGER and USB HOST for the Rev 1.5. Unzip
 the SD card files to the root of an empty FAT32 card.
 
 <details open>
@@ -73,6 +73,28 @@ section on the USB-C port:
 On a plain Rev1, or a Rev 1.5 running ordinary CHGame games, the power
 section stays off and the port works as a normal 5 V charging port.
 
+### Pins
+
+The CH32X035 pins the libraries use on the Rev 1.5. The libraries own these
+pins, so a sketch using CHPower must not reconfigure them. The one exception
+is sharing the I2C bus, described below the table.
+
+| Pin | Name | Function | Used by |
+|---|---|---|---|
+| PA0 | HOST_EN / VBUS sense (`PIN_VBUS_SENSE`) | Output high: battery boost on, 5 V to the port (host mode). Analog input: VBUS sense, ADC1 channel 0, about 81 mV of VBUS per count. A 1 kΩ pull-down (R11) keeps the boost off after reset. Do not call `pinMode`, `digitalWrite` or `analogRead` on it. | CHPower (`pwr::`), CHUSBHost (`host::`) |
+| PC14 | CC1 | USB-C CC1, through the CH211's CC switches to the USBPD peripheral | CHPower (`pd::`) |
+| PC15 | CC2 | USB-C CC2, through the CH211's CC switches to the USBPD peripheral | CHPower (`pd::`) |
+| PC16 | USB D− | USBFS data, in host mode | CHUSBHost (`host::`) |
+| PC17 | USB D+ | USBFS data, in host mode | CHUSBHost (`host::`) |
+| PC18 | SDA (CN2) | I2C data (software I2C, 4.7 kΩ pull-up). SWDIO after reset. | CHPower (`pwr::`) |
+| PC19 | SCL (CN2) | I2C clock (software I2C, 4.7 kΩ pull-up). SWCLK after reset. | CHPower (`pwr::`) |
+
+The I2C bus on CN2 carries the CH211 (addresses 0x35, and 0x34 for its
+fast read) and the INA226 (0x40). Other CN2 accessories can share the bus
+through `Wire` from the main loop, at other addresses. On a Rev0 board PA0
+is the H1 header and PC14/PC15 are buttons, so a Rev0 build stops with an
+error.
+
 ### Repository contents
 
 | | Item | Location |
@@ -81,7 +103,6 @@ section stays off and the port works as a normal 5 V charging port.
 | 🔌 | **CHUSBHost** library, `#include <CHUSBHost.h>`: USB host and device drivers (requires CHPower) | [`libraries/CHUSBHost/`](libraries/CHUSBHost/README.md) |
 | 🎛 | **CHPDTrigger** example: USB-PD trigger and bench supply | [`libraries/CHPower/examples/CHPDTrigger/`](libraries/CHPower/examples/CHPDTrigger/README.md) |
 | ⌨️ | **CHUSBHost** example: device viewer, powered hubs, device log | [`libraries/CHUSBHost/examples/CHUSBHost/`](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
-| 🔎 | **CHPDHubProbe** example: step-by-step test for a powered USB-C hub, with USB, PD and timeline logs | [`libraries/CHUSBHost/examples/CHPDHubProbe/`](libraries/CHUSBHost/examples/CHPDHubProbe/README.md) |
 | 📐 | **Design notes**: CH211 and INA226 rules, host mode entry sequence, reset behaviour | [`docs/design.md`](docs/design.md) |
 | 🧰 | **Tools**: code size measurement, README images, the examples multi-cart and its cover | [`tools/`](tools/) |
 | 📝 | **Changelog** | [`CHANGELOG.md`](CHANGELOG.md) |
@@ -244,13 +265,6 @@ The full list, and what survives a reset, is in
 Both use the CHGame apps' "secret agent" visual style and include box art
 for the CHGame game menu. Run `chgame export` in an example's folder to
 make a `.chgame` file for a Rev1 SD card.
-
-**PD HUB PROBE** ([README](libraries/CHUSBHost/examples/CHPDHubProbe/README.md))
-is a bench tool for hubs that don't work in USB HOST. It steps through
-four cases (hub unpowered, powered later, unplugged, plugged in powered)
-and logs the hub's responses at each step. It was tested with Apple's
-USB-C Digital AV Multiport Adapter; the results are in
-[the design notes](docs/design.md#12-powered-hubs-added-2026-11-20).
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
