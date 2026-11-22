@@ -73,6 +73,7 @@ off: the power section wakes up as a plain 5 V charger port.
 | 🔎 | **CHPDHubProbe**: a guided bench test for a powered USB-C hub, with its USB, PD and timeline logs | [`libraries/CHUSBHost/examples/CHPDHubProbe/`](libraries/CHUSBHost/examples/CHPDHubProbe/README.md) |
 | 📐 | **The design**: the CH211's and the INA226's rules, the host entry sequence, what survives a reset | [`docs/design.md`](docs/design.md) |
 | 🧰 | **Tools**: what each part costs, the pictures on this page | [`tools/`](tools/) |
+| 📝 | **Changelog**: CHPower 0.1.0 and CHUSBHost 0.2.0, the first release | [`CHANGELOG.md`](CHANGELOG.md) |
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
@@ -183,10 +184,10 @@ over the CHGame library's frame loop alone:
 | `host::begin(host::MOUSE)` | +8.4 KB | +760 B |
 | `host::begin(host::KEYBOARD)` | +9.3 KB | +808 B |
 | `host::begin(host::GAMEPAD)` | +9.9 KB | +948 B |
-| `host::begin(host::KEYBOARD \| host::MOUSE \| host::HUB)` | +10.6 KB | +1,052 B |
+| `host::begin(host::KEYBOARD \| host::MOUSE \| host::HUB)` | +10.6 KB | +1,044 B |
 | `host::begin(host::PADS)`: HID, Xbox 360 and Switch Pro | +10.9 KB | +948 B |
-| `host::begin(host::ALL)`: every driver, chained hubs, the probe log | +15.0 KB | +3,104 B |
-| `... KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK, the PD sink: powered hubs | +17.1 KB | +1,384 B |
+| `host::begin(host::ALL)`: every driver, chained hubs, the probe log | +15.1 KB | +3,096 B |
+| `... KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK, the PD sink: powered hubs | +17.1 KB | +1,376 B |
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 

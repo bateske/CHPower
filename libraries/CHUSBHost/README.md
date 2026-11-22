@@ -9,8 +9,10 @@ the MCU's Rp, and every check of CHPower's runs while the host has the
 port (5 V never goes onto another source's 5 V; host power goes off within
 milliseconds of an unplug). Rev 1.5 only.
 
-The example is [CHUSBHost](examples/CHUSBHost/README.md): a view for each
-kind of device and a log of what each one said.
+The examples are [CHUSBHost](examples/CHUSBHost/README.md), a view for
+each kind of device and a log of what each one said, and
+[CHPDHubProbe](examples/CHPDHubProbe/README.md), a guided bench test for a
+powered USB-C hub.
 
 ## A sketch
 
@@ -73,10 +75,10 @@ RAM), measured by the repository's `tools/sizes.py` (rev1, -Os with LTO):
 | `MOUSE` | 6.0 KB | 688 B |
 | `KEYBOARD` | 6.9 KB | 736 B |
 | `GAMEPAD` | 7.5 KB | 876 B |
-| `KEYBOARD \| MOUSE \| HUB` | 8.2 KB | 980 B |
+| `KEYBOARD \| MOUSE \| HUB` | 8.2 KB | 972 B |
 | `PADS` | 8.5 KB | 876 B |
-| `ALL`, with `HUBS` (the log's 1.6 KB of RAM included) | 12.6 KB | 3,032 B |
-| `KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK and the PD sink: powered hubs | 14.7 KB | 1,312 B |
+| `ALL`, with `HUBS` (the log's 1.6 KB of RAM included) | 12.7 KB | 3,024 B |
+| `KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK and the PD sink: powered hubs | 14.7 KB | 1,304 B |
 
 Before the drivers were split (one library, every driver and the PD sink
 in every host sketch), the example app was 2.9 KB larger with everything
