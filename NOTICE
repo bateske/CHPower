@@ -18,6 +18,8 @@ Microelectronics" (this runs on their CH32X035):
   transfers and the hub handling, from the USBFS host driver and the
   HOST_KM example (ch32x035_usbfs_host.c and app_km.c, V1.0.2, 2021).
 
-The pictures' lettering (docs/brand/, each example's docs/cart.png) is set
-in pixel fonts by other people: Bitrimus (CC0) for the brand, and each box
-art's font is named in its tools/art/title.txt.
+The pictures' lettering (docs/brand/, each example's docs/cart.png and the
+examples cart's cover, tools/cart/art/cover.png) is set in pixel fonts by
+other people: Bitrimus (CC0) for the brand, and each box art's font is named
+in its title.txt (an example's tools/art/title.txt, and
+tools/cart/art/title.txt for the cover).

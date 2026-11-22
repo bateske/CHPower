@@ -40,6 +40,13 @@ links the parts it calls. The repository also has three example sketches.
 These libraries are kept separate from CHGame because only the Rev 1.5 has
 the power section. Later boards may not have it.
 
+**Try the example apps without building them:** download the
+[multi-cart (`CHPower-Examples.chgame`)](https://github.com/bateske/CHPower/releases/latest/download/CHPower-Examples.chgame)
+or the
+[SD card files (`CHPower-Examples-sdcard.zip`)](https://github.com/bateske/CHPower/releases/latest/download/CHPower-Examples-sdcard.zip).
+Both contain PD TRIGGER, USB HOST and PD HUB PROBE for the Rev 1.5. Unzip
+the SD card files to the root of an empty FAT32 card.
+
 <details open>
 <summary><b>Contents</b></summary>
 
@@ -76,7 +83,7 @@ section stays off and the port works as a normal 5 V charging port.
 | ⌨️ | **CHUSBHost** example: device viewer, powered hubs, device log | [`libraries/CHUSBHost/examples/CHUSBHost/`](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
 | 🔎 | **CHPDHubProbe** example: step-by-step test for a powered USB-C hub, with USB, PD and timeline logs | [`libraries/CHUSBHost/examples/CHPDHubProbe/`](libraries/CHUSBHost/examples/CHPDHubProbe/README.md) |
 | 📐 | **Design notes**: CH211 and INA226 rules, host mode entry sequence, reset behaviour | [`docs/design.md`](docs/design.md) |
-| 🧰 | **Tools**: code size measurement, README images | [`tools/`](tools/) |
+| 🧰 | **Tools**: code size measurement, README images, the examples multi-cart and its cover | [`tools/`](tools/) |
 | 📝 | **Changelog** | [`CHANGELOG.md`](CHANGELOG.md) |
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
