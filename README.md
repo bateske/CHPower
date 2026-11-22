@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower: power for the CHGame Rev 1.5. The handheld pages from the PD TRIGGER app's box art to USB HOST's"></a>
+<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower: power for the CHGame Rev 1.5. The handheld cycles between the PD TRIGGER and USB HOST box art"></a>
 
 <p>
 <a href="https://github.com/bateske/CHGame"><img src="docs/brand/btn-chgame.svg" alt="CHGame"></a>&nbsp;
@@ -18,62 +18,66 @@
 
 <br>
 
-<img src="docs/brand/warning.svg" alt="Rev 1.5 only: the power section. For the CHGame Rev1 board with its power section. CN1 can carry up to 20 V: the library guards it.">
+<img src="docs/brand/warning.svg" alt="Rev 1.5 only: the power section. Warning: up to 20V">
 
 <br>
 
 </div>
 
-**CHPower** is the add-on for the [CHGame](https://github.com/bateske/CHGame)
-handheld's Rev 1.5 board, the one with a power section: a USB-C charger
-becomes a bench supply on its protected output, and its battery powers a
-keyboard, a mouse or a gamepad as a USB host, or a powered USB-C hub powers
-(and charges) it while it stays the host. Two Arduino libraries drive it,
-every safety inside them, and each sketch is linked with only the parts it
-calls. Two apps show them off, and a third tries out a new hub.
+**CHPower** contains two Arduino libraries for the power section of the
+[CHGame](https://github.com/bateske/CHGame) Rev 1.5 board:
 
-It lives apart from CHGame because the power section is the Rev 1.5's
-alone: later boards may not carry it.
+- **CHPower** runs the USB-PD sink and the protected output (CN1). With a
+  USB-C PD charger connected, CN1 can be used as an adjustable bench
+  supply.
+- **CHUSBHost** runs the USB port as a host, powered from the battery. It
+  supports keyboards, mice, gamepads and hubs. A powered USB-C hub can
+  also power and charge the board while it stays the host.
+
+The safety checks are in the libraries, not in the sketches. A sketch only
+links the parts it calls. The repository also has three example sketches.
+
+These libraries are kept separate from CHGame because only the Rev 1.5 has
+the power section. Later boards may not have it.
 
 <details open>
 <summary><b>Contents</b></summary>
 
-1. [What it is](#-what-it-is)
-2. [Get started](#-get-started): [install](#2-install-the-libraries), [a first sketch](#a-first-sketch)
-3. [Only what you call](#-only-what-you-call)
-4. [What the libraries guard](#-what-the-libraries-guard)
-5. [The apps](#-the-apps)
-6. [For developers](#-for-developers)
-7. [Licences](#-licences)
+1. [Hardware](#-hardware)
+2. [Get started](#-get-started): [install](#2-install-the-libraries), [first sketches](#first-sketches)
+3. [Code size](#-code-size)
+4. [Safety](#-safety)
+5. [Examples](#-examples)
+6. [Licences](#-licences)
 
 </details>
 
-## ⚡ What it is
+## ⚡ Hardware
 
-The Rev 1.5 is a CHGame Rev1 (same chip, same pins, same games) with a
-power section added on the USB-C port:
+The Rev 1.5 is a CHGame Rev1 (same MCU, same pins, same games) with a power
+section on the USB-C port:
 
-| | What the board has | What drives it |
+| Feature | Hardware | API |
 |---|---|---|
-| **USB-PD sink** | the CH32X035's USBPD peripheral, reached through the CH211's CC switches | `pd::`: PD 2.0 and 3.0, fixed supplies and PPS (any voltage in a range, 20 mV steps); data and power role swaps, for powered hubs |
-| **Protected output CN1** | the CH211's high-side switch, an INA226 metering it and cutting it off, an eFuse | `pwr::`: on and off by a checked transaction, the limit, the meter |
-| **Battery-powered USB host** | a boost from the battery on PA0, the USBFS peripheral as a host | `host::`: keyboards, mice, HID, Xbox 360 and Switch Pro pads, hubs (a hub behind a hub too), and powered PD hubs that run and charge the board |
+| **USB-PD sink** | CH32X035 USBPD peripheral, connected through the CH211's CC switches | `pd::` PD 2.0 and 3.0, fixed supplies and PPS (20 mV steps), data and power role swaps for powered hubs |
+| **Protected output (CN1)** | CH211 high-side switch, INA226 current meter and cut-off, eFuse | `pwr::` enable and disable, current limit, measurements |
+| **USB host** | Boost converter from the battery (PA0), USBFS peripheral in host mode | `host::` keyboards, mice, HID gamepads, Xbox 360 and Switch Pro pads, hubs (up to two levels), powered PD hubs |
 
-A plain Rev1, or a Rev 1.5 running ordinary CHGame games, leaves all of it
-off: the power section wakes up as a plain 5 V charger port.
+On a plain Rev1, or a Rev 1.5 running ordinary CHGame games, the power
+section stays off and the port works as a normal 5 V charging port.
 
-### What is here
+### Repository contents
 
-| | Piece | Where |
+| | Item | Location |
 |---|---|---|
-| 🔋 | **CHPower**, `#include <CHPower.h>`: the power section, the USB-PD sink, CN1 and the PD log | [`libraries/CHPower/`](libraries/CHPower/README.md) |
-| 🔌 | **CHUSBHost**, `#include <CHUSBHost.h>`: the USB host, a driver for each kind of device, on CHPower | [`libraries/CHUSBHost/`](libraries/CHUSBHost/README.md) |
-| 🎛 | **CHPDTrigger**, CHPower's example: a USB-PD trigger and bench supply | [`libraries/CHPower/examples/CHPDTrigger/`](libraries/CHPower/examples/CHPDTrigger/README.md) |
-| ⌨️ | **CHUSBHost**, CHUSBHost's example: a view for each device, powered hubs, and a log | [`libraries/CHUSBHost/examples/CHUSBHost/`](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
-| 🔎 | **CHPDHubProbe**: a guided bench test for a powered USB-C hub, with its USB, PD and timeline logs | [`libraries/CHUSBHost/examples/CHPDHubProbe/`](libraries/CHUSBHost/examples/CHPDHubProbe/README.md) |
-| 📐 | **The design**: the CH211's and the INA226's rules, the host entry sequence, what survives a reset | [`docs/design.md`](docs/design.md) |
-| 🧰 | **Tools**: what each part costs, the pictures on this page | [`tools/`](tools/) |
-| 📝 | **Changelog**: CHPower 0.1.0 and CHUSBHost 0.2.0, the first release | [`CHANGELOG.md`](CHANGELOG.md) |
+| 🔋 | **CHPower** library, `#include <CHPower.h>`: power section, USB-PD sink, CN1, PD log | [`libraries/CHPower/`](libraries/CHPower/README.md) |
+| 🔌 | **CHUSBHost** library, `#include <CHUSBHost.h>`: USB host and device drivers (requires CHPower) | [`libraries/CHUSBHost/`](libraries/CHUSBHost/README.md) |
+| 🎛 | **CHPDTrigger** example: USB-PD trigger and bench supply | [`libraries/CHPower/examples/CHPDTrigger/`](libraries/CHPower/examples/CHPDTrigger/README.md) |
+| ⌨️ | **CHUSBHost** example: device viewer, powered hubs, device log | [`libraries/CHUSBHost/examples/CHUSBHost/`](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
+| 🔎 | **CHPDHubProbe** example: step-by-step test for a powered USB-C hub, with USB, PD and timeline logs | [`libraries/CHUSBHost/examples/CHPDHubProbe/`](libraries/CHUSBHost/examples/CHPDHubProbe/README.md) |
+| 📐 | **Design notes**: CH211 and INA226 rules, host mode entry sequence, reset behaviour | [`docs/design.md`](docs/design.md) |
+| 🧰 | **Tools**: code size measurement, README images | [`tools/`](tools/) |
+| 📝 | **Changelog** | [`CHANGELOG.md`](CHANGELOG.md) |
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
@@ -81,11 +85,12 @@ off: the power section wakes up as a plain 5 V charger port.
 
 ### 1. Install the CHGame board package
 
-The CHGame board package, **0.4.0 or later** (it has the *CHGame Rev1*
-board, and brings the CHGame library these build on): add its Boards
-Manager URL in the Arduino IDE (*File > Preferences*), then install
-*CHGame* in the Boards Manager. CHGame's README has the steps:
-[Get started](https://github.com/bateske/CHGame#-get-started).
+Install the CHGame board package, version **0.4.0 or later**. It provides
+the *CHGame Rev1* board and the CHGame library. In the Arduino IDE, add
+this URL under *File > Preferences > Additional Boards Manager URLs*, then
+install *CHGame* in the Boards Manager. See
+[CHGame's Get started](https://github.com/bateske/CHGame#-get-started) for
+details.
 
 ```
 https://github.com/bateske/CHGame/releases/latest/download/package_chgame_index.json
@@ -93,25 +98,26 @@ https://github.com/bateske/CHGame/releases/latest/download/package_chgame_index.
 
 ### 2. Install the libraries
 
-Download this repository (*Code > Download ZIP*) and copy both folders in
-its `libraries/` into your sketchbook's `libraries` folder (*File >
-Preferences > Sketchbook location*), then restart the IDE:
+Download this repository (*Code > Download ZIP*) and copy both folders
+from `libraries/` into the `libraries` folder of your sketchbook (shown
+under *File > Preferences > Sketchbook location*). Restart the IDE.
 
 ```bash
 git clone https://github.com/bateske/CHPower
 cp -r CHPower/libraries/CHPower CHPower/libraries/CHUSBHost ~/Arduino/libraries/
 ```
 
-### 3. Pick the board and open an app
+### 3. Select the board and open an example
 
-*Tools > Board > CHGame > CHGame Rev1* (a Rev 1.5 is a Rev1), then *File >
-Examples > CHPower > CHPDTrigger* or *File > Examples > CHUSBHost >
-CHUSBHost*, and Upload. A build for Rev0 stops with an error: there, the
-power section's pins are buttons.
+Select *Tools > Board > CHGame > CHGame Rev1* (the Rev 1.5 uses the Rev1
+board definition). Open *File > Examples > CHPower > CHPDTrigger* or
+*File > Examples > CHUSBHost > CHUSBHost* and upload it. Building for Rev0
+fails with an error, because the power section's pins are buttons on that
+board.
 
-### A first sketch
+### First sketches
 
-A charger asked for 9 V, then the output switched on with a 0.5 A cut-off:
+Request 9 V from a charger, then enable CN1 with a 0.5 A cut-off:
 
 ```cpp
 #include <CHGame.h>
@@ -119,20 +125,20 @@ A charger asked for 9 V, then the output switched on with a 0.5 A cut-off:
 
 void setup() {
     chgame.boot();
-    pwr::begin();               // first: the output inhibited, CC a plain sink
-    pd::start();                // the PD sink: detection, then the charger's offer
+    pwr::begin();               // call first: output inhibited, CC set as a plain sink
+    pd::start();                // start the PD sink: detection, then the charger's offer
 }
 
 void loop() {
     if (!chgame.nextFrame()) return;
     chgame.pollButtons();
-    pd::service();              // every pass: the PD sink and every safety check
-    if (chgame.justPressed(A_BUTTON)) pd::request(2);       // the offer's second supply: 9 V on most chargers
-    if (chgame.justPressed(B_BUTTON) && pd::contractMv()) pwr::enableCn1(500);   // CN1 on, cut off at 0.5 A
+    pd::service();              // call every loop: PD sink and safety checks
+    if (chgame.justPressed(A_BUTTON)) pd::request(2);       // second supply in the offer, 9 V on most chargers
+    if (chgame.justPressed(B_BUTTON) && pd::contractMv()) pwr::enableCn1(500);   // CN1 on, 0.5 A cut-off
 }
 ```
 
-A keyboard, read on battery power:
+Read a keyboard on battery power:
 
 ```cpp
 #include <CHGame.h>
@@ -141,8 +147,8 @@ A keyboard, read on battery power:
 void setup() {
     chgame.boot();
     pwr::begin();
-    host::begin(host::KEYBOARD);    // the drivers to link: a keyboard, nothing else
-    host::enter();                  // waits for a device, then powers it
+    host::begin(host::KEYBOARD);    // link only the keyboard driver
+    host::enter();                  // wait for a device, then power it
 }
 
 void loop() {
@@ -155,121 +161,83 @@ void loop() {
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
-## 🪶 Only what you call
+## 🪶 Code size
 
-The CHGame has 50 KB for a program and 18 KB of RAM. These libraries are
-built so that a sketch is linked with what it calls and nothing more, and
-none of it is a framework you have to live inside: call the parts you want,
-in the order you want, from your own loop.
+The CHGame has 50 KB of flash and 18 KB of RAM, so a sketch links only the
+parts it calls. The libraries are not a framework: call what you need from
+your own loop.
 
-- **CHPower** is linked a piece at a time: `pwr::begin()` is the core, and
-  the PD sink, CN1 and the PD log each come in with their first call. The
-  pieces reach each other only through hooks a piece fills in when it is
-  first used, so the core never pulls the others in.
-- **CHUSBHost** has a driver for each kind of device, and links only the
-  ones the sketch names in `host::begin()`; `host::ALL` is all of them.
-  The PD code is linked for a host only when it names `host::PD_SWAP`
-  (powered hubs) or calls `pd::` itself; otherwise the PD sink is paused
-  through CHPower without being referenced.
+- **CHPower:** `pwr::begin()` is the core. The PD sink, CN1 and the PD log
+  are each linked on their first call. They connect through hooks that are
+  set when a part is first used, so the core does not reference them.
+- **CHUSBHost:** each device type has its own driver. Only the drivers
+  named in `host::begin()` are linked, and `host::ALL` links all of them.
+  The PD code is linked only for `host::PD_SWAP` (powered hubs) or when
+  the sketch calls `pd::` itself. Otherwise CHPower pauses the PD sink
+  without linking it.
 
-Measured on minimal sketches (`python tools/sizes.py`, rev1, -Os with LTO),
-over the CHGame library's frame loop alone:
+Sizes of minimal sketches compared to the bare CHGame frame loop,
+measured with `python tools/sizes.py` (rev1, -Os, LTO):
 
-| A sketch that calls | Flash | RAM |
+| Sketch calls | Flash | RAM |
 |---|---:|---:|
-| `pwr::begin()`: the power section's core and its safeties | +2.4 KB | +72 B |
-| + `pd::start()`: the USB-PD sink | +7.6 KB | +372 B |
-| + `pwr::enableCn1()`: the protected output | +8.7 KB | +412 B |
-| + `plog::begin()`: the PD log | +9.5 KB | +2,348 B |
+| `pwr::begin()`: power section core and safety checks | +2.4 KB | +72 B |
+| + `pd::start()`: USB-PD sink | +7.6 KB | +372 B |
+| + `pwr::enableCn1()`: protected output | +8.7 KB | +412 B |
+| + `plog::begin()`: PD log | +9.5 KB | +2,348 B |
 | `host::begin(host::MOUSE)` | +8.4 KB | +760 B |
 | `host::begin(host::KEYBOARD)` | +9.3 KB | +808 B |
 | `host::begin(host::GAMEPAD)` | +9.9 KB | +948 B |
 | `host::begin(host::KEYBOARD \| host::MOUSE \| host::HUB)` | +10.6 KB | +1,044 B |
 | `host::begin(host::PADS)`: HID, Xbox 360 and Switch Pro | +10.9 KB | +948 B |
-| `host::begin(host::ALL)`: every driver, chained hubs, the probe log | +15.1 KB | +3,096 B |
-| `... KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK, the PD sink: powered hubs | +17.1 KB | +1,376 B |
+| `host::begin(host::ALL)`: all drivers, chained hubs, probe log | +15.1 KB | +3,096 B |
+| `... KEYBOARD \| MOUSE \| HUB \| PD_SWAP`, Try.SNK, PD sink: powered hubs | +17.1 KB | +1,376 B |
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
-## 🛡 What the libraries guard
+## 🛡 Safety
 
-The output can carry 20 V, and the host puts the battery's 5 V on the
-port, so the safety is in the libraries, not left to each sketch:
+CN1 can output up to 20 V, and host mode puts the battery's 5 V on the
+port. The libraries enforce the following so that sketches don't have to:
 
-- **The output goes by the charger's contract**, which the PD sink hands
-  the power section: no contract, a limit over its budget, or host mode,
-  and `enableCn1()` refuses. A contract that ends turns it off, one that
-  shrinks lowers the limit. The charger is taken at its word on the
-  voltage, and the output follows a new voltage as a bench supply's does.
-- **It is watched every 10 ms**: the INA226's cut-off (in hardware),
-  reverse current, the CH211 resetting itself or going quiet each turn it
-  off.
-- **5 V never meets another source's 5 V**: host power is refused while a
-  charger or a PC is on the port, or the output is on, and goes off within
-  milliseconds of an unplug. When a powered hub takes over the power, the
-  board's 5 V is off and VBUS under 0.8 V before the hub's comes on.
-- **Every exit to the CHGame menu powers down first** (START held, the
-  library's `exitToMenu()`), through a hook in the CHGame library that
-  CHPower fills in.
+- **CN1 follows the PD contract.** `enableCn1()` is refused if there is no
+  contract, if the requested limit exceeds the contract's current, or in
+  host mode. CN1 turns off when the contract ends, and the limit is
+  lowered when the contract's current drops. The charger's voltage is
+  trusted, and the output follows a voltage change.
+- **CN1 is checked every 10 ms.** It turns off on an INA226 cut-off (in
+  hardware), on reverse current, or if the CH211 resets or stops
+  responding.
+- **The board never drives 5 V against another source.** Host power is
+  refused while a charger or PC is connected or CN1 is on, and it turns
+  off within milliseconds of an unplug. When a powered hub takes over,
+  the board's 5 V is off and VBUS is below 0.8 V before the hub's power
+  comes on.
+- **Exiting to the CHGame menu powers everything down** (START held, or
+  `exitToMenu()`), through a hook in the CHGame library that CHPower sets.
 
-[CHPower's README](libraries/CHPower/README.md#what-it-guards-by-itself)
-has the whole list, and what a reset leaves as it was.
+The full list, and what survives a reset, is in
+[CHPower's README](libraries/CHPower/README.md#what-it-guards-by-itself).
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
-## 🕹 The apps
+## 🕹 Examples
 
 | PD TRIGGER | USB HOST |
 |---|---|
-| <img src="libraries/CHPower/examples/CHPDTrigger/docs/gameplay.gif" width="256" alt="PD TRIGGER: the voltage raised to 11 V, the output switched on, the meter and the scope"> | <img src="libraries/CHUSBHost/examples/CHUSBHost/docs/gameplay.gif" width="256" alt="USB HOST: a keyboard typing, a mouse, a gamepad and the log"> |
-| A USB-C charger as a bench supply: any voltage it offers, PPS 20 mV at a time, on the protected output with a meter, a scope, a current cut-off, a guided tour and the PD log. [Its README](libraries/CHPower/examples/CHPDTrigger/README.md) | A keyboard, a mouse or a gamepad (HID, Xbox 360, Switch Pro), on the port or through hubs, each with a view of its own, and a log of what each device said for a PC to read. A powered USB-C hub runs and charges it, plugged in powered or powered later. [Its README](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
+| <img src="libraries/CHPower/examples/CHPDTrigger/docs/gameplay.gif" width="256" alt="PD TRIGGER: voltage raised to 11 V, output on, meter and scope"> | <img src="libraries/CHUSBHost/examples/CHUSBHost/docs/gameplay.gif" width="256" alt="USB HOST: keyboard input, mouse, gamepad and log"> |
+| Uses a USB-C charger as a bench supply: any voltage the charger offers (PPS in 20 mV steps) on CN1, with a meter, a scope, a current cut-off, a guided tour and the PD log. [README](libraries/CHPower/examples/CHPDTrigger/README.md) | Shows keyboards, mice and gamepads (HID, Xbox 360, Switch Pro), connected directly or through hubs, each in its own view, plus a device log that a PC can read. Supports powered USB-C hubs, connected either before or after the hub has power. [README](libraries/CHUSBHost/examples/CHUSBHost/README.md) |
 
-Both are drawn in the CHGame apps' "secret agent" style, and both have box
-art for the CHGame's visual game menu: `chgame export` in an app's folder
-makes it a `.chgame` cart for a Rev1 SD card.
+Both use the CHGame apps' "secret agent" visual style and include box art
+for the CHGame game menu. Run `chgame export` in an example's folder to
+make a `.chgame` file for a Rev1 SD card.
 
-**PD HUB PROBE** ([its README](libraries/CHUSBHost/examples/CHPDHubProbe/README.md))
-is a plain bench tool beside them: it walks through a hub unpowered,
-powered later, unplugged and plugged in powered, and logs what the hub
-said at each step, for a hub that does not behave in USB HOST. Apple's
-USB-C Digital AV Multiport Adapter is the one tested; what it does is in
-[the design](docs/design.md#12-powered-hubs-added-2026-11-20).
-
-<p align="right"><a href="#readme-top">back to top ↑</a></p>
-
-## 🧰 For developers
-
-The apps build, run in the simulator and record their GIFs with the CHGame
-repository's tools, which take a sketch from here as they take their own
-(with these libraries beside it). Clone CHGame beside this repository and
-install its tools once:
-
-```bash
-git clone https://github.com/bateske/CHGame
-pip install -e "./CHGame[sim]"
-```
-
-Then, in an app's folder (`libraries/CHPower/examples/CHPDTrigger`, say):
-
-```bash
-chgame build                                          # release build for rev1, with its size
-chgame upload                                         # onto the board, over USB
-chgame sim && chgame run tools/scripts/screens.txt out/screens   # its screens, in the simulator
-chgame check                                          # everything that runs without a board
-chgame gif                                            # docs/gameplay.gif, from tools/scripts/gameplay.txt
-chgame boxart                                         # docs/cart.png, from tools/cart.py
-chgame export                                         # build/<Name>.chgame, a cart for the SD menu
-```
-
-And from this repository's root:
-
-```bash
-python tools/sizes.py --markdown                      # the table above, measured again
-python tools/brand/make.py                            # this page's banner, buttons, caution and docs/brand/social.png
-```
-
-`docs/brand/social.png` is the repository's link preview: GitHub takes it
-only by hand, under *Settings > Social preview*.
+**PD HUB PROBE** ([README](libraries/CHUSBHost/examples/CHPDHubProbe/README.md))
+is a bench tool for hubs that don't work in USB HOST. It steps through
+four cases (hub unpowered, powered later, unplugged, plugged in powered)
+and logs the hub's responses at each step. It was tested with Apple's
+USB-C Digital AV Multiport Adapter; the results are in
+[the design notes](docs/design.md#12-powered-hubs-added-2026-11-20).
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>
 
@@ -277,13 +245,13 @@ only by hand, under *Settings > Social preview*.
 
 | Path | Licence |
 |---|---|
-| `libraries/CHPower/`, `libraries/CHUSBHost/` (but their examples), `tools/`, `docs/`, root files | Apache-2.0 (`LICENSE`, `NOTICE`) |
-| `libraries/CHPower/examples/CHPDTrigger/`, `libraries/CHUSBHost/examples/CHUSBHost/`, `libraries/CHUSBHost/examples/CHPDHubProbe/` | MIT (each its own `LICENSE`) |
+| `libraries/CHPower/`, `libraries/CHUSBHost/` (except their examples), `tools/`, `docs/`, root files | Apache-2.0 (`LICENSE`, `NOTICE`) |
+| `libraries/CHPower/examples/CHPDTrigger/`, `libraries/CHUSBHost/examples/CHUSBHost/`, `libraries/CHUSBHost/examples/CHPDHubProbe/` | MIT (each has its own `LICENSE`) |
 
-The USB-PD sink and the USB host's transfers are adapted from WCH's
-CH32X035 examples, whose notice limits them to WCH's microcontrollers
-(this is one): [NOTICE](NOTICE) names the files. The box art's titles are
-set in a pixel font by others, named in each app's `tools/art/title.txt`;
-this page's lettering is Bitrimus (CC0).
+The USB-PD sink and the USB host transfers are adapted from WCH's CH32X035
+examples. WCH's notice limits that code to WCH microcontrollers, which the
+CH32X035 is. [NOTICE](NOTICE) lists the files. The box art titles use
+third-party pixel fonts, credited in each example's `tools/art/title.txt`.
+The lettering in this README's images is Bitrimus (CC0).
 
 <p align="right"><a href="#readme-top">back to top ↑</a></p>

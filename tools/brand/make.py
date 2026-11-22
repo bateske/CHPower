@@ -197,8 +197,7 @@ def main():
         print(f"docs/brand/btn-*.svg: {len(BUTTONS)} buttons")
     if "warning" in a.what:
         B.WARNING_TITLE = "REV 1.5 ONLY: THE POWER SECTION"
-        B.WARNING_LINES = ["For the CHGame Rev1 board with its power section.",
-                           "CN1 can carry up to 20 V: the library guards it."]
+        B.WARNING_LINES = ["Warning: up to 20V"]
         p = OUT / "warning.svg"
         p.write_text(B.warning_svg(), encoding="utf-8", newline="\n")
         print(p.relative_to(ROOT).as_posix())
