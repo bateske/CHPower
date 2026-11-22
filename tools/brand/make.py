@@ -49,6 +49,7 @@ def chgame_brand():
 B = chgame_brand()
 W, H = B.W, B.H
 MAGENTA = "#FF00FF"                         # the CHGAME pixel logo's own shadow colour
+BOARD_RED = "#E04A3F"                       # the handheld's body (the brand's board is yellow)
 
 # A plug: the add-on's icon on its button.
 B.ICONS["plug"] = B.art("""
@@ -89,14 +90,15 @@ def draw_static(c):
     c.mask(word, wx, wy, B.INK)
 
     y = LY + logo.height + 34
-    for line in ("Power for the CHGame Rev 1.5.", "Pay only for what you call."):
+    for line in ("Power for the CHGame Rev 1.5.", "Power Output to 20V.",
+                 "External device support:", "Keyboard, Mouse, Gamepad."):
         m = B.scaled(face.mask(line), 3)
         c.mask(m, LX, y, B.INK)
         y += m.shape[0] + 10
 
     ph, gap = 50, 16
     pills, x, py = [], LX, y + 18
-    for label, fill in (("USB-PD", B.LAVENDER), ("USB HOST", B.MINT), ("CN1 CUT-OFF", B.SAGE)):
+    for label, fill in (("USB-PD", B.LAVENDER), ("USB HOST", B.MINT)):
         m = B.scaled(face.mask(label), 3)
         w = m.shape[1] + 40
         if x > LX and x + w > LX + B.COL_W:
@@ -128,7 +130,11 @@ def banner_frames():
     for pressed in (False, True):
         c = B.Canvas(W, H, B.PAPER)
         c.im = base.im.copy()
-        B.draw_board(c, pressed="down" if pressed else None, led=pressed)
+        yellow, B.YELLOW = B.YELLOW, BOARD_RED          # draw_board() paints the body in B.YELLOW
+        try:
+            B.draw_board(c, pressed="down" if pressed else None, led=pressed)
+        finally:
+            B.YELLOW = yellow
         states[pressed] = c.im
     covers = [B.cover(p) for p in COVERS]
     steps = []

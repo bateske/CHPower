@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower: power for the CHGame Rev 1.5. The handheld cycles between the PD TRIGGER and USB HOST box art"></a>
+<a href="https://github.com/bateske/CHGame"><img src="docs/brand/banner.gif" width="100%" alt="CHPower: power for the CHGame Rev 1.5. Power output to 20V. External device support: keyboard, mouse, gamepad. A red handheld cycles between the PD TRIGGER and USB HOST box art"></a>
 
 <p>
 <a href="https://github.com/bateske/CHGame"><img src="docs/brand/btn-chgame.svg" alt="CHGame"></a>&nbsp;
