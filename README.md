@@ -61,6 +61,10 @@ the SD card files to the root of an empty FAT32 card.
 
 ## ⚡ Hardware
 
+<p align="center">
+<img src="docs/rev1.5-board.webp" width="600" alt="The CHGame Rev 1.5 board, red, its screen listing USB PD 5-20V, 2A + protection, and USB host for keyboard, mouse, gamepads and hubs">
+</p>
+
 The Rev 1.5 is a CHGame Rev1 (same MCU, same pins, same games) with a power
 section on the USB-C port:
 
