@@ -8,10 +8,11 @@
 <a href="https://github.com/bateske/CHGame"><img src="docs/brand/btn-chgame.svg" alt="CHGame"></a>&nbsp;
 <a href="#-get-started"><img src="docs/brand/btn-start.svg" alt="Get started"></a>&nbsp;
 <a href="docs/design.md"><img src="docs/brand/btn-design.svg" alt="The design"></a>&nbsp;
+<a href="https://www.arduboy.com/buy-chgame"><img src="docs/brand/btn-shop.svg" alt="Buy one"></a>&nbsp;
 <a href="https://community.arduboy.com/c/color/56"><img src="docs/brand/btn-forum.svg" alt="Forum"></a>
 </p>
 
-[![Board](https://img.shields.io/badge/board-CHGame%20Rev%201.5-F9D84A?style=for-the-badge&labelColor=252628)](https://www.arduboy.com/buy-chgame)
+[![Board](https://img.shields.io/badge/board-CHGame%20Rev%201.5-F9D84A?style=for-the-badge&labelColor=252628)](https://github.com/bateske/CHGame)
 [![Arduino](https://img.shields.io/badge/Arduino-2%20libraries-BDE2C7?style=for-the-badge&logo=arduino&logoColor=white&labelColor=252628)](#-get-started)
 [![USB-PD](https://img.shields.io/badge/USB--PD-3.0%20%2B%20PPS-C8B6F3?style=for-the-badge&labelColor=252628)](libraries/CHPower/README.md)
 [![RISC-V](https://img.shields.io/badge/RISC--V-CH32X035-B7DACC?style=for-the-badge&logo=riscv&logoColor=white&labelColor=252628)](docs/design.md)

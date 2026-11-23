@@ -173,6 +173,7 @@ BUTTONS = [
     ("btn-chgame", "CHGame", "pad", B.YELLOW),
     ("btn-start", "Get started", "play", B.LAVENDER),
     ("btn-design", "The design", "page", B.MINT),
+    ("btn-shop", "Buy one", "basket", B.SAGE),
     ("btn-forum", "Forum", "chat", B.CREAM),
 ]
 
